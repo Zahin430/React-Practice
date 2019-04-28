@@ -8,17 +8,33 @@ class App extends React.Component {
         //Used to initialize state
         super(props);
 
-        this.state = { lat: null };
+        // This is called at first to do direct assignment or initialize
+        // to this state
+        this.state = { lat: null, errorMessage: '' };
+
+        window.navigator.geolocation.getCurrentPosition(
+            position => {
+                //Called to update state
+                this.setState({
+                    lat: position.coords.latitude
+                });
+            },
+            err => {
+                this.setState({errorMessage: err.message });
+            }
+        );
     }
     
     // The state can be used inside of the render function
-    render() {
-        window.navigator.geolocation.getCurrentPosition(
-            position => console.log(position),
-            err => console.log(err)
+    //Render method should not contain any
+    render() {  
+        return (
+        <div>Latitude: {this.state.lat}
+            <br />
+            Error: {this.state.errorMessage}
+        </div>
+
         );
-    
-        return <div>Latitude: {this.state.lat}</div>
     }
 }
 
